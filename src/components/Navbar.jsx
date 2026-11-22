@@ -8,6 +8,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import { personalInfo } from '../data/portfolioData';
 
 export const Navbar = ({ activeSection, scrollTo }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -43,7 +44,7 @@ export const Navbar = ({ activeSection, scrollTo }) => {
             size={22}
           />
           <span className="group-hover:text-cyan-400 transition-colors duration-300">
-            Dev<span className="text-cyan-400">.</span>Portfolio
+            Dhanush<span className="text-cyan-400">_</span>Portfolio
           </span>
         </div>
 
@@ -112,7 +113,7 @@ export const Navbar = ({ activeSection, scrollTo }) => {
             }`}>
               <div className="rounded-xl border border-slate-800 bg-slate-950/95 backdrop-blur-xl shadow-xl p-2">
                 <a
-                  href="/resume.pdf"
+                  href={personalInfo.resume.viewUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setResumeDropdownOpen(false)}
@@ -123,8 +124,8 @@ export const Navbar = ({ activeSection, scrollTo }) => {
                 </a>
 
                 <a
-                  href="/resume.pdf"
-                  download="Dhanush_K_Resume.pdf"
+                  href={personalInfo.resume.downloadUrl}
+                  download={personalInfo.resume.downloadFilename}
                   onClick={() => setResumeDropdownOpen(false)}
                   className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-cyan-400 hover:bg-slate-800/60 transition-colors"
                 >

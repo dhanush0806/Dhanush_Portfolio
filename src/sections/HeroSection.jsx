@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { ChevronRight, MapPin, Briefcase, Layers } from "lucide-react";
-import { Github, Linkedin, Email } from "./BrandIcons";
+import {
+  ChevronRight,
+  MapPin,
+  Briefcase,
+  Layers,
+  FileText,
+  Eye,
+  Download,
+} from "lucide-react";
+import { Github, Linkedin, Email } from "../components/BrandIcons";
+import { personalInfo, coreStack } from "../data/portfolioData";
 import heroImage from "../assets/hero2.png";
 
 export const HeroSection = ({ heroVisible, scrollTo }) => {
   const [imgError, setImgError] = useState(false);
+  const [resumeDropdownOpen, setResumeDropdownOpen] = useState(false);
 
   return (
     <section
@@ -12,7 +22,7 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
       className="min-h-[calc(100vh-5rem)] flex items-center justify-center pt-2 sm:pt-6 pb-12 px-4 sm:px-6 relative -mt-4 sm:-mt-6"
     >
       <div className="max-w-6xl w-full mx-auto grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-        
+
         {/* Left Column: Photo + Professional Info */}
         <div
           className={`lg:col-span-5 flex flex-row items-center gap-4 lg:flex-col lg:gap-5 transition-all duration-1000 ${
@@ -29,7 +39,7 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
               {!imgError ? (
                 <img
                   src={heroImage}
-                  alt="Dhanush Kathirvel"
+                  alt={personalInfo.name}
                   className="w-full h-full object-cover object-top filter contrast-[1.03] transition-transform duration-500 group-hover:scale-105"
                   onError={() => setImgError(true)}
                 />
@@ -44,27 +54,23 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
             </div>
           </div>
 
-          {/* Details below Photo with Single Open-to-Work Status Badge */}
+          {/* Details below Photo */}
           <div className="flex flex-col items-start text-left space-y-2 pt-1 flex-1 min-w-0 lg:items-center lg:text-center">
-            {/* Name */}
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Dhanush K
+              {personalInfo.name}
             </h2>
 
-            {/* Role */}
             <div className="flex items-center justify-center gap-2 text-sm sm:text-base md:text-lg font-bold text-cyan-400 font-mono">
               <Briefcase size={16} className="text-cyan-400 shrink-0" />
-              <span>Full Stack Developer</span>
+              <span>{personalInfo.role}</span>
             </div>
 
-            {/* Fresher - Next line directly below role */}
             <div className="flex items-center justify-center">
               <span className="px-3 py-0.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-cyan-300 text-xs sm:text-sm font-mono font-medium tracking-wide">
-                Fresher
+                {personalInfo.status}
               </span>
             </div>
 
-            {/* Single Prominent Status Badge */}
             <div className="pt-0.5">
               <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs sm:text-sm font-mono font-semibold bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 shadow-[0_0_14px_rgba(16,185,129,0.2)] backdrop-blur-md">
                 <span className="relative flex h-2 w-2">
@@ -77,35 +83,32 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
               </span>
             </div>
 
-            {/* Location */}
             <div className="flex items-center justify-center gap-1.5 text-xs sm:text-sm font-mono text-slate-300 pt-0.5">
               <MapPin size={14} className="text-cyan-400 shrink-0" />
-              <span>Tiruchirappalli, TN</span>
+              <span>{personalInfo.location}</span>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Title, Intro, Core Stack & Action Buttons/Socials */}
+        {/* Right Column: Title, Intro, Core Stack & Actions */}
         <div
           className={`lg:col-span-7 space-y-6 sm:space-y-7 transition-all duration-1000 delay-200 ${
             heroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
-          {/* Headline */}
           <div className="space-y-3">
-  <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
-   Hi, I'm< br />
-    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 animate-gradient-x">
-      Dhanush K
-    </span>
-  </h1>
-  <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-xl leading-[1.8] font-light">
-  A Computer Science graduate passionate about{" "}
-  <span className="text-white font-medium">Full-Stack Development</span>{" "}
-  and building modern web applications. Looking forward to starting my professional journey while learning, building, and growing in the{" "}
-  <span className="text-cyan-400 font-medium">software industry.</span>
-</p>
-</div>
+            <h1 className="hidden sm:block text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]">
+              {personalInfo.headline}
+              <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 animate-gradient-x">
+                {personalInfo.name}
+              </span>
+            </h1>
+
+            <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-xl leading-[1.8] font-light">
+              {personalInfo.bio}
+            </p>
+          </div>
 
           {/* Core Stack Strip */}
           <div className="pt-2">
@@ -117,8 +120,9 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
                 Core Stack
               </span>
             </div>
+
             <div className="flex flex-wrap gap-2.5">
-              {["React.js", "Node.js", "Express.js", "PostgreSQL", "MySQL", "Mongodb", "Java", "JavaScript", "REST APIs"].map((tech) => (
+              {coreStack.map((tech) => (
                 <span
                   key={tech}
                   className="px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700/70 text-sm font-bold text-white shadow-sm hover:border-cyan-500/50 hover:text-cyan-300 transition-all duration-200"
@@ -129,7 +133,7 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
             </div>
           </div>
 
-          {/* Action Buttons & Social Icons directly below Core Stack */}
+          {/* Action Buttons & Social Icons */}
           <div className="pt-2 flex flex-wrap items-center gap-4 sm:gap-5">
             <button
               onClick={() => scrollTo("projects")}
@@ -142,17 +146,60 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
               />
             </button>
 
-            <button
-              onClick={() => scrollTo("contact")}
-              className="px-7 py-3 rounded-xl border border-slate-700 bg-slate-900/60 text-white font-semibold hover:border-cyan-400 hover:text-cyan-400 hover:bg-slate-800 transition-all duration-300 text-xs sm:text-sm tracking-wide cursor-pointer"
+            {/* Resume Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setResumeDropdownOpen(true)}
+              onMouseLeave={() => setResumeDropdownOpen(false)}
             >
-              Contact Me
-            </button>
+              <button
+                onClick={() => setResumeDropdownOpen((prev) => !prev)}
+                className="px-7 py-3 rounded-xl bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-2 tracking-wide cursor-pointer text-xs sm:text-sm"
+              >
+                <FileText size={16} />
+                <span>Resume</span>
+                <ChevronRight
+                  size={16}
+                  className={`transition-transform duration-300 ${
+                    resumeDropdownOpen ? "translate-x-1" : ""
+                  }`}
+                />
+              </button>
+
+              <div
+                className={`absolute top-0 left-full pl-3 w-40 z-50 transition-all duration-200 ${
+                  resumeDropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                }`}
+              >
+                <div className="rounded-xl border border-slate-800 bg-slate-950/95 backdrop-blur-xl shadow-xl p-2">
+                  <a
+                    href={personalInfo.resume.viewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setResumeDropdownOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-cyan-400 hover:bg-slate-800/60 transition-colors"
+                  >
+                    <Eye size={16} />
+                    View
+                  </a>
+
+                  <a
+                    href={personalInfo.resume.downloadUrl}
+                    download={personalInfo.resume.downloadFilename}
+                    onClick={() => setResumeDropdownOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-cyan-400 hover:bg-slate-800/60 transition-colors"
+                  >
+                    <Download size={16} />
+                    Download
+                  </a>
+                </div>
+              </div>
+            </div>
 
             {/* Social Media Icons */}
             <div className="flex items-center gap-2.5 sm:pl-3 sm:border-l sm:border-slate-800">
               <a
-                href="https://github.com/dhanush0806"
+                href={personalInfo.socialLinks.github}
                 target="_blank"
                 rel="noreferrer"
                 className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-600 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
@@ -160,8 +207,9 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
               >
                 <Github size={19} />
               </a>
+
               <a
-                href="https://www.linkedin.com/in/dhanush-k-a998a72bb/"
+                href={personalInfo.socialLinks.linkedin}
                 target="_blank"
                 rel="noreferrer"
                 className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-400 hover:text-[#0A66C2] hover:border-[#0A66C2]/50 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
@@ -169,8 +217,9 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
               >
                 <Linkedin size={19} />
               </a>
+
               <a
-                href="mailto:dhanushskms11@gmail.com"
+                href={personalInfo.socialLinks.email}
                 className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-400 hover:text-[#EA4335] hover:border-[#EA4335]/50 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
                 aria-label="Email"
               >
@@ -179,7 +228,6 @@ export const HeroSection = ({ heroVisible, scrollTo }) => {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

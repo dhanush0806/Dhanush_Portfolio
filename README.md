@@ -6,7 +6,7 @@ A modern and interactive personal portfolio website built to showcase my technic
 
 ## Key Features
 
-- **Hero Section:** Professional introduction with animated text and interactive code editor.
+- **Hero Section:** Professional introduction with profile spotlight, animated headline, core stack badges, and quick resume access.
 - **About Me:** Academic background and career interests.
 - **Technical Skills:** Organized display of programming languages, frameworks, databases, and development tools.
 - **Projects:** Showcase of full-stack development projects with descriptions and technology details.
@@ -36,6 +36,7 @@ my-portfolio/
 ├── src/
 │   ├── assets/
 │   ├── components/
+│   ├── data/
 │   ├── hooks/
 │   ├── sections/
 │   ├── App.jsx

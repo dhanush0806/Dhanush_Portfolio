@@ -1,32 +1,60 @@
-import React, { useState, useEffect } from 'react';
-
-import { Navbar } from './components/Navbar';
-import { HeroSection } from './components/HeroSection';
-import { AboutSection } from './sections/AboutSection';
-import { ProjectsSection } from './components/ProjectsSection';
-import { ExperienceSection } from './sections/ExperienceSection';
-import { EducationSection } from './sections/EducationSection';
-import { Footer } from './components/Footer';
-import { CertificationsSection } from './sections/CertificationsSection';
-import { ContactSection } from './sections/ContactSection';
+import React, { useState, useEffect, useRef } from 'react';
+import { Navbar, Footer, FloatingScrollButton } from './components';
+import {
+  HeroSection,
+  AboutSection,
+  ProjectsSection,
+  ExperienceSection,
+  EducationSection,
+  CertificationsSection,
+  ContactSection,
+} from './sections';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('home');
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [heroVisible, setHeroVisible] = useState(false);
+  const glowRef = useRef(null);
+  const progressBarRef = useRef(null);
 
   useEffect(() => {
-    setTimeout(() => setHeroVisible(true), 150);
-    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    const timer = setTimeout(() => setHeroVisible(true), 150);
+
+    // Optimized hardware-accelerated ambient glow without re-rendering App
+    const handleMouseMove = (e) => {
+      if (glowRef.current) {
+        glowRef.current.style.background = `radial-gradient(800px circle at ${e.clientX}px ${e.clientY}px, rgba(6, 182, 212, 0.05), transparent 40%)`;
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
-  // Track scroll position for active section & smooth photo flight progress
+  // Track scroll position for active section
   useEffect(() => {
+    const sections = [
+      'home',
+      'about',
+      'skills',
+      'projects',
+      'experience',
+      'education',
+      'certifications',
+      'contact',
+    ];
+
     const handleScroll = () => {
-      const sections = ['home', 'about', 'skills', 'projects', 'experience', 'education', 'certifications', 'contact'];
       const scrollPosition = window.scrollY + 150;
+
+      // Update top scroll progress indicator
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0 && progressBarRef.current) {
+        const progress = (window.scrollY / totalHeight) * 100;
+        progressBarRef.current.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      }
 
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -57,55 +85,31 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 selection:bg-cyan-500/30 font-sans overflow-x-hidden">
-      
-      {/* INJECTED CUSTOM CSS FOR ANIMATIONS */}
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-20px) scale(1.02); }
-        }
-        .animate-float { animation: float 8s ease-in-out infinite; }
-        
-        @keyframes float-delayed {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-20px) scale(1.02); }
-        }
-        .animate-float-delayed { animation: float-delayed 10s ease-in-out infinite 3s; }
-        
-        @keyframes gradient-x {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        .animate-gradient-x {
-          background-size: 200% 200%;
-          animation: gradient-x 6s ease infinite;
-        }
-
-        .reveal-smooth {
-          opacity: 0;
-          transform: translateY(30px);
-          transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal-smooth.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      `}} />
-
-      {/* Advanced Interactive Background Glow */}
-      <div 
+      {/* Interactive Background Glow (Ref-driven for 60fps+ performance) */}
+      <div
+        ref={glowRef}
         className="pointer-events-none fixed inset-0 z-0 transition-opacity duration-300"
         style={{
-          background: `radial-gradient(800px circle at ${mousePos.x}px ${mousePos.y}px, rgba(6, 182, 212, 0.05), transparent 40%)`,
+          background:
+            'radial-gradient(800px circle at 50% 30%, rgba(6, 182, 212, 0.05), transparent 40%)',
         }}
       />
 
       {/* Background Grid Pattern */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-      
+      <div className="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+
       {/* Animated Ambient Orbs */}
-      <div className="fixed top-[-10%] left-[-10%] z-0 h-[40rem] w-[40rem] rounded-full bg-cyan-600/10 blur-[130px] pointer-events-none animate-float"></div>
-      <div className="fixed bottom-[-10%] right-[-10%] z-0 h-[40rem] w-[40rem] rounded-full bg-blue-700/10 blur-[130px] pointer-events-none animate-float-delayed"></div>
+      <div className="fixed top-[-10%] left-[-10%] z-0 h-[40rem] w-[40rem] rounded-full bg-cyan-600/10 blur-[130px] pointer-events-none animate-float" />
+      <div className="fixed bottom-[-10%] right-[-10%] z-0 h-[40rem] w-[40rem] rounded-full bg-blue-700/10 blur-[130px] pointer-events-none animate-float-delayed" />
+
+      {/* Top Scroll Progress Bar */}
+      <div className="fixed top-0 left-0 right-0 h-[3px] z-[60] bg-slate-900/30 pointer-events-none">
+        <div
+          ref={progressBarRef}
+          className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.9)] transition-[width] duration-75 ease-out rounded-r-full"
+          style={{ width: '0%' }}
+        />
+      </div>
 
       {/* Navigation */}
       <Navbar activeSection={activeSection} scrollTo={scrollTo} />
@@ -121,6 +125,9 @@ export default function App() {
         <ContactSection />
         <Footer />
       </main>
+
+      {/* Dynamic Floating Action Button: Scroll to explore / Back to top */}
+      <FloatingScrollButton scrollTo={scrollTo} />
     </div>
   );
 }

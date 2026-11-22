@@ -2,45 +2,7 @@ import React, { useState } from "react";
 import { SectionHeader } from "../components/SectionHeader";
 import { SpotlightCard } from "../components/SpotlightCard";
 import { Award, ChevronLeft, ChevronRight } from "lucide-react";
-
-// PASTE ORIGINAL CERTIFICATE FILES IN public/certificates/ OR PASTE EXTERNAL LINKS
-const certifications = [
-  {
-    title: "Java (Basic)",
-    issuer: "HackerRank",
-    date: "September 2026",
-    type: "Technical Certification",
-    // ORIGINAL HACKERRANK LINK
-    link: "https://www.hackerrank.com/certificates/22e2298eae22",
-  },
-  {
-    title: "Python Programming",
-    // PASTE ORIGINAL ISSUER (e.g. Coursera / Udemy / Infosys Springboard)
-    issuer: "Cybernaut Edu-Tech",
-    date: "August 2024",
-    type: "PDF",
-    // PASTE ORIGINAL FILE IN public/certificates/python-certificate.jpg OR PASTE LINK
-    link: "/certificates/Python_Certificate.pdf",
-  },
-  {
-    title: "Java Programming",
-    // PASTE ORIGINAL ISSUER
-    issuer: "Cybernaut Edu-Tech",
-    date: "May 2025",
-    type: "PDF",
-    // PASTE ORIGINAL FILE IN public/certificates/web-certificate.pdf OR PASTE LINK
-    link: "/certificates/Java_Certificate.pdf",
-  },
-  {
-    title: "C++ Programming",
-    // PASTE ORIGINAL ISSUER
-    issuer: "Cybernaut Edu-Tech",
-    date: "April 2024",
-    type: "PDF",
-    // PASTE ORIGINAL FILE IN public/certificates/fullstack-certificate.jpg OR PASTE LINK
-    link: "/certificates/C++_Certificate.pdf",
-  },
-];
+import { certifications } from "../data/portfolioData";
 
 export const CertificationsSection = () => {
   const [currentPage, setCurrentPage] = useState(0);

@@ -6,6 +6,8 @@ import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const ProjectCard = ({ title, description, tags, github, demo, delay = 0 }) => {
   const [ref, isVisible] = useScrollReveal(delay);
+  const hasLiveDemo = demo && demo !== '#';
+
   return (
     <div ref={ref} className={`reveal-smooth h-full ${isVisible ? 'visible' : ''}`}>
       <SpotlightCard className="h-full flex flex-col group hover:-translate-y-2">
@@ -14,12 +16,38 @@ export const ProjectCard = ({ title, description, tags, github, demo, delay = 0 
             <Terminal size={22} />
           </div>
           <div className="flex gap-2.5 sm:gap-3">
-            <a href={github} className="p-2 sm:p-2.5 rounded-full bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-700 hover:scale-110 transition-all duration-300" aria-label="GitHub Repository">
-              <Github size={17} />
-            </a>
-            <a href={demo} className="p-2 sm:p-2.5 rounded-full bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/30 hover:bg-cyan-500/10 hover:scale-110 transition-all duration-300" aria-label="Live Demo">
-              <ExternalLink size={17} />
-            </a>
+            {github && (
+              <a 
+                href={github} 
+                target="_blank" 
+                rel="noreferrer"
+                className="p-2 sm:p-2.5 rounded-full bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-700 hover:scale-110 transition-all duration-300" 
+                aria-label="GitHub Repository"
+                title="View Source on GitHub"
+              >
+                <Github size={17} />
+              </a>
+            )}
+            {hasLiveDemo ? (
+              <a 
+                href={demo} 
+                target="_blank" 
+                rel="noreferrer"
+                className="p-2 sm:p-2.5 rounded-full bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/30 hover:bg-cyan-500/10 hover:scale-110 transition-all duration-300" 
+                aria-label="Live Demo"
+                title="View Live Demo"
+              >
+                <ExternalLink size={17} />
+              </a>
+            ) : (
+              <span 
+                className="p-2 sm:p-2.5 rounded-full bg-slate-800/20 border border-slate-800/60 text-slate-600 cursor-not-allowed" 
+                title="Live Demo Coming Soon"
+                aria-label="Demo Not Available"
+              >
+                <ExternalLink size={17} />
+              </span>
+            )}
           </div>
         </div>
         

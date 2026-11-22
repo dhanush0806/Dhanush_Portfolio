@@ -3,6 +3,14 @@ import { Terminal, Code2, Layout, Database, Cpu } from 'lucide-react';
 import { SectionHeader } from '../components/SectionHeader';
 import { SkillCategory } from '../components/SkillCategory';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { personalInfo, skillCategories } from '../data/portfolioData';
+
+const iconMap = {
+  layout: <Layout size={22} className="text-blue-400" />,
+  database: <Database size={22} className="text-emerald-400" />,
+  terminal: <Terminal size={22} className="text-purple-400" />,
+  cpu: <Cpu size={22} className="text-amber-400" />
+};
 
 const RevealText = ({ children, delay = 0 }) => {
   const [ref, isVisible] = useScrollReveal(delay);
@@ -24,12 +32,11 @@ export const AboutSection = () => {
             <SectionHeader title="About Me" icon={<Terminal size={28} />} />
             
             <div className="space-y-6">
-              <RevealText delay={100}>
-                I'm a Computer Science graduate with a keen interest in full-stack development. I enjoy building responsive web applications, developing efficient solutions, and applying my technical knowledge to real-world challenges.
-              </RevealText>
-              <RevealText delay={200}>
-                As an aspiring developer, I'm eager to begin my professional journey, contribute to meaningful projects, and grow through continuous learning. I'm committed to improving my skills and delivering quality solutions as part of a team.
-              </RevealText>
+              {personalInfo.aboutParagraphs.map((paragraph, index) => (
+                <RevealText key={index} delay={(index + 1) * 100}>
+                  {paragraph}
+                </RevealText>
+              ))}
             </div>
           </div>
 
@@ -38,30 +45,15 @@ export const AboutSection = () => {
             <SectionHeader title="Technical Arsenal" icon={<Code2 size={28} />} delay={200} />
             
             <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
-              <SkillCategory 
-                title="Frontend" 
-                icon={<Layout size={22} className="text-blue-400"/>}
-                skills={['HTML', 'CSS', 'JavaScript', 'TypeScript', 'React.js', 'Angular', 'Tailwind CSS']}
-                delay={100}
-              />
-              <SkillCategory 
-                title="Backend" 
-                icon={<Database size={22} className="text-emerald-400"/>}
-                skills={['Java', 'Spring Boot', 'Node.js', 'Express.js', 'Python', 'REST APIs']}
-                delay={200}
-              />
-              <SkillCategory 
-                title="Database" 
-                icon={<Terminal size={22} className="text-purple-400"/>}
-                skills={['PostgreSQL', 'MySQL', 'MongoDB']}
-                delay={300}
-              />
-              <SkillCategory 
-                title="Development Tools" 
-                icon={<Cpu size={22} className="text-amber-400"/>}
-                skills={['Git & GitHub', 'VS Code', 'Postman', 'pgAdmin', 'MySQL Workbench']}
-                delay={400}
-              />
+              {skillCategories.map((cat) => (
+                <SkillCategory 
+                  key={cat.title}
+                  title={cat.title} 
+                  icon={iconMap[cat.iconType] || <Code2 size={22} className="text-cyan-400" />}
+                  skills={cat.skills}
+                  delay={cat.delay}
+                />
+              ))}
             </div>
           </div>
 
